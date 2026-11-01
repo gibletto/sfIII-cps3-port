@@ -1,0 +1,72 @@
+/*
+ * BG_DATA.C  stage background index and special screen position tables
+ *
+ * bg_index_tbl gives the background number (bg_index) for each stage and area; every other
+ * stage background table is indexed by it. etc_bg_limit_tbl and bg_pos_tbl2 are the scroll
+ * limits and start positions of the layers of each special screen drawn by bg_etc_write. Read
+ * by BG000.C, the stage background services; the etc_ tables also by CMD_MAIN.C (debug menu
+ * screen). bg_test_menu_scr, the layout of a background position display with the BG and stage
+ * labels of BG_DATA2.C, is not referred to.
+ */
+
+#include "types.h"
+#include "structs.h"
+
+#pragma section TBL
+
+extern const s16 bg_index_tbl[][3];
+extern const s16 etc_bg_limit_tbl[][6];
+extern const s32 bg_pos_tbl2[][4][2];
+extern const TM_STRING bg_test_menu_scr[];
+extern const char str_AREA[];
+extern const s8 str_BG_1[];
+extern const s8 str_BG_1_POS_X[];
+extern const s8 str_BG_1_POS_Y[];
+extern const s8 str_BG_2[];
+extern const s8 str_BG_2_POS_X[];
+extern const s8 str_BG_2_POS_Y[];
+extern const s8 str_BG_3[];
+extern const s8 str_BG_3_POS_X[];
+extern const s8 str_BG_3_POS_Y[];
+extern const s8 str_BG_4[];
+extern const s8 str_BG_4_POS_X[];
+extern const s8 str_BG_4_POS_Y[];
+extern const s8 str_STAGE_2[];
+
+const s16 bg_index_tbl[14][3] = {
+    { 0, 0, 0 }, { 1, 1, 1 }, { 3, 4, 4 }, { 5, 6, 6 },
+    { 7, 8, 8 }, { 9, 9, 9 }, { 10, 10, 10 }, { 11, 12, 13 },
+    { 14, 15, 15 }, { 16, 16, 16 }, { 18, 17, 17 }, { 4, 3, 3 },
+    { 2, 2, 2 }, { 19, 19, 19 },
+};
+
+const s16 etc_bg_limit_tbl[5][6] = {
+    { 256, 256, 312, 0, 0, 0 }, { 256, 256, 312, 0, 0, 0 }, { 256, 256, 312, 0, 0, 0 }, { 256, 256, 312, 0, 0, 0 },
+    { 256, 256, 312, 0, 0, 0 },
+};
+
+const s32 bg_pos_tbl2[5][4][2] = {
+    { { 33554432, 0 }, { 33554432, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 33554432, 0 }, { 33554432, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 33554432, 0 }, { 33554432, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 33554432, 0 }, { 33554432, 0 }, { 0, 0 }, { 0, 0 } },
+    { { 33554432, 0 }, { 33554432, 0 }, { 0, 0 }, { 0, 0 } },
+};
+
+/* nothing in the program refers to it (provisional name) */
+const TM_STRING bg_test_menu_scr[14] = {
+    { 30, 20, 0xE, str_BG_1_POS_X },
+    { 30, 21, 0xE, str_BG_1_POS_Y },
+    { 30, 22, 0xE, str_BG_2_POS_X },
+    { 30, 23, 0xE, str_BG_2_POS_Y },
+    { 30, 24, 0xE, str_BG_3_POS_X },
+    { 30, 25, 0xE, str_BG_3_POS_Y },
+    { 30, 26, 0xE, str_BG_4_POS_X },
+    { 30, 27, 0xE, str_BG_4_POS_Y },
+    { 3, 22, 0xE, str_BG_1 },
+    { 3, 23, 0xE, str_BG_2 },
+    { 3, 24, 0xE, str_BG_3 },
+    { 3, 25, 0xE, str_BG_4 },
+    { 3, 19, 0xE, str_STAGE_2 },
+    { 3, 20, 0xE, str_AREA },
+};

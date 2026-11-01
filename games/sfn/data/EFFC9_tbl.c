@@ -1,0 +1,62 @@
+/*
+ * EFFC9_TBL.C  judge girl tables
+ *
+ * ag_sel_table gives the character set of each judge by stage, round and slot, and ag_cc_table
+ * the colour of each character set. app_pos_hosei gives the position of each of the three
+ * judges from the screen centre, judge_gals_kage_tbl the shadow of each character set, and
+ * sel_ejg_ix_table the votes of the three judges, by winner and one of two patterns picked by
+ * the game timer, when the round scores are close. Read by EFFC9.C, the judge girls.
+ * judge_gals_kage_tbl_tail follows the shadow table and is not referred to by name.
+ */
+
+#include "types.h"
+#include "structs.h"
+
+#pragma section TBL
+
+extern const u8 sel_ejg_ix_table[][2][4];
+extern const u16 ag_cc_table[];
+extern const s16 app_pos_hosei[][3];
+extern const s16 judge_gals_kage_tbl[][4];
+extern const u8 judge_gals_kage_tbl_tail[];
+extern const u8 ag_sel_table[][4][4];
+
+const u8 sel_ejg_ix_table[2][2][4] = {
+    { { 0, 0, 1, 255 }, { 1, 0, 0, 255 } }, { { 1, 1, 0, 255 }, { 0, 1, 1, 255 } },
+};
+
+const u16 ag_cc_table[7] = {
+    0x2080, 0x2081, 0x2082, 0x2083, 0x2084, 0x2085, 0x2086,
+};
+
+const s16 app_pos_hosei[3][3] = {
+    { -64, -6, -2 }, { 0, -8, -4 }, { 64, -6, -2 },
+};
+
+const s16 judge_gals_kage_tbl[7][4] = {
+    { 0, -6, 32, 12 }, { 0, -6, 32, 14 }, { 0, -6, 32, 8 }, { 0, -6, 32, 8 },
+    { 0, -6, 32, 8 }, { 0, -6, 32, 10 }, { 0, -6, 32, 12 },
+};
+
+const u8 judge_gals_kage_tbl_tail[4] = {
+    6, 7, 4, 3,
+};
+
+const u8 ag_sel_table[16][4][4] = {
+    { { 0, 1, 2, 0 }, { 3, 4, 5, 0 }, { 6, 0, 1, 0 }, { 2, 3, 4, 0 } },
+    { { 0, 3, 1, 0 }, { 5, 4, 0, 0 }, { 1, 2, 5, 0 }, { 0, 3, 1, 0 } },
+    { { 5, 4, 0, 0 }, { 1, 2, 0, 0 }, { 5, 3, 0, 0 }, { 5, 4, 1, 0 } },
+    { { 5, 2, 0, 0 }, { 1, 3, 0, 0 }, { 5, 4, 0, 0 }, { 2, 3, 4, 0 } },
+    { { 0, 3, 1, 0 }, { 5, 4, 0, 0 }, { 1, 2, 5, 0 }, { 0, 3, 1, 0 } },
+    { { 0, 4, 1, 0 }, { 5, 2, 0, 0 }, { 1, 3, 5, 0 }, { 0, 4, 1, 0 } },
+    { { 5, 2, 0, 0 }, { 1, 3, 0, 0 }, { 5, 4, 0, 0 }, { 5, 2, 1, 0 } },
+    { { 5, 3, 0, 0 }, { 1, 4, 0, 0 }, { 5, 2, 0, 0 }, { 5, 3, 1, 0 } },
+    { { 5, 1, 0, 0 }, { 5, 2, 0, 0 }, { 1, 3, 5, 0 }, { 0, 4, 1, 0 } },
+    { { 0, 2, 1, 0 }, { 5, 3, 0, 0 }, { 1, 4, 5, 0 }, { 0, 2, 1, 0 } },
+    { { 5, 3, 0, 0 }, { 1, 4, 0, 0 }, { 5, 2, 0, 0 }, { 5, 3, 1, 0 } },
+    { { 5, 4, 0, 0 }, { 1, 2, 0, 0 }, { 5, 3, 0, 0 }, { 5, 4, 1, 0 } },
+    { { 0, 2, 1, 0 }, { 5, 3, 0, 0 }, { 1, 4, 5, 0 }, { 0, 2, 1, 0 } },
+    { { 0, 3, 1, 0 }, { 5, 4, 0, 0 }, { 1, 2, 5, 0 }, { 0, 3, 1, 0 } },
+    { { 5, 4, 0, 0 }, { 1, 2, 0, 0 }, { 5, 3, 0, 0 }, { 5, 4, 1, 0 } },
+    { { 5, 2, 0, 0 }, { 1, 3, 0, 0 }, { 5, 4, 0, 0 }, { 5, 2, 1, 0 } },
+};

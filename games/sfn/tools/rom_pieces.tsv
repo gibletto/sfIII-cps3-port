@@ -1,0 +1,15 @@
+# The parts of the program image that the build copies from your ROM: no code, only the graphics and
+# the bytes outside the linked sections. tools/cps3rom1.py extract reads them from your ROM set (the
+# program SIMM, decrypted) and pack puts them into the linked image. Objects named here are labels only
+# (their names, and .RES for their bytes). "outside the linked sections" are bytes an earlier build left
+# in the image the CD was made from; no source produces them.
+# stored: how the program SIMM holds them (encrypted like the program, or plain).
+start	end	stored	what
+06000200	06000400	encrypted	outside the linked sections
+06443022	0646A892	encrypted	outside the linked sections
+0646A892	06500000	plain	outside the linked sections
+06500000	0657A1E0	encrypted	data/cg_labels.src
+0657A1E0	06580000	plain	outside the linked sections
+06580000	067CD98C	encrypted	data/cg_labels.src
+067CD98C	067FFFE0	plain	outside the linked sections
+067FFFEC	06800000	plain	outside the linked sections

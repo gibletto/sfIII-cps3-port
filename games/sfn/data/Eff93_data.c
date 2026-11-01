@@ -1,0 +1,21 @@
+/*
+ * EFF93_DATA.C  ending scene BG 3 screen record
+ *
+ * effb0_scr_record_data is the screen record list that effect B0 passes to sprite_list_setup
+ * when it sets up BG 3 for the scene changes of an ending. Read by EFFB0.C.
+ */
+
+#include "types.h"
+#include "structs.h"
+
+#pragma section TBL
+
+extern const s16 effb0_scr_record_data[];
+
+/* provisional name */
+const s16 effb0_scr_record_data[14] = {
+    /* [0] */
+    4, 88,  0x7F, 0x7F00, 60,  0xFF, 0x7F00, 60,  0x17F, 0x7F00, 60,  -1,
+    -1,
+    0,
+};
