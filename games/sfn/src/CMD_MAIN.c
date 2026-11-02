@@ -1332,6 +1332,7 @@ void debug_char_preview_init(void) {
 
 #pragma inline(debug_rgb_editor_navigate, debug_rgb_editor_print)
 
+#ifndef HOST_PORT    /* never called, so the board has no code for them (and no Debug_RGB) */
 /* provisional name */
 static void debug_rgb_editor_navigate(u16 sw) {
     if (dbg_p2sw_0 & BUTTON_LP) {
@@ -1396,6 +1397,7 @@ static void debug_rgb_editor_print(s16 print) {
     part = green << 5;
     *(u16*)COLOR_RAM = (word | part | r) & 0x7FFF;
 }
+#endif
 
 /* provisional name */
 void debug_char_preview_run(void) {
