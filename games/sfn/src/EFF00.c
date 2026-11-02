@@ -29,6 +29,19 @@ void effect_00_move(WORK_Other_JUDGE* ewk) {
     u16 dip;
     ewk->fade_cja.l += 0x2000;
     ewk->fade_cja.w = ewk->fade_cja.w & 3;
+#ifdef HOST_PORT
+    /* effect_19_init pulls one work it never fills, which runs here with no master. On the board its master is
+       the BIOS at address 0: it shows nothing and is put back on its third frame. The same, without reading 0. */
+    if (ewk->my_master == NULL) {
+        if (ewk->wu.routine_no[0] < R0_KILL) {
+            ewk->wu.routine_no[0]++;
+            return;
+        }
+        all_cgps_put_back(&ewk->wu);
+        push_effect_work(&ewk->wu);
+        return;
+    }
+#endif
     switch (ewk->wu.routine_no[0]) {
     case R0_INIT:
         ewk->wu.routine_no[0]++;
