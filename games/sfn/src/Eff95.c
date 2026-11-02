@@ -167,7 +167,12 @@ s16 typ;
 
 
 
-s32 effect_95_rank_init(s16 kind, s16 pl, s16 flag, s16 color) {
+s32 effect_95_rank_init(kind, pl, flag, color)
+s16 kind;
+s16 pl;
+s16 flag;
+s16 color;
+{
     WORK_Other* ewk;
     s16 ix;
     s16 col;

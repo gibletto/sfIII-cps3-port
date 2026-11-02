@@ -102,20 +102,11 @@ s8 Rnd;  /* 020138F1 */
 
 
 
-/* Both are called with the PLW* in R4 and tail-jump to Next_Be_Free with R4 as it came in. */
-#ifdef HOST_PORT
 void End_Pattern(PLW* wk) { Next_Be_Free(wk); }
 
 
 
-void Next_Be_Passive(PLW* wk) { Next_Be_Free(wk); }
-#else
-void End_Pattern(void) { Next_Be_Free(); }
-
-
-
-void Next_Be_Passive(void) { Next_Be_Free(); }
-#endif
+void Next_Be_Passive(PLW* wk, s32 unused) { Next_Be_Free(wk); }
 
 
 
@@ -2240,7 +2231,11 @@ s32 Check_Term_ABS_Distance(PLW* wk) {
 
 
 
-s32 Check_Com_Add_Y(PLW* wk, s16 Pos_Y, s16 Range) {
+s32 Check_Com_Add_Y(wk, Pos_Y, Range)
+PLW* wk;
+s16 Pos_Y;
+s16 Range;
+{
     if (Range == -1) {
         return 1;
     }
@@ -3360,7 +3355,11 @@ s32 Next_End(PLW* wk) {
 
 
 
-void Next_Another_Menu(PLW* wk, s16 Next_Action, s16 Next_Menu) {
+void Next_Another_Menu(wk, Next_Action, Next_Menu)
+PLW* wk;
+s16 Next_Action;
+s16 Next_Menu;
+{
     if (Next_Action != 1) {
         CP_No[wk->wu.id][0] = Next_Action;
         Pattern_Index[wk->wu.id] = Next_Menu;

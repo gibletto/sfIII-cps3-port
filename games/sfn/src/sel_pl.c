@@ -106,7 +106,7 @@ void Yun_Yang_Face_Other();
 void Yun_Yang_Select();
 extern u8 Straight_Lose_Count;
 
-s16 Select_Player(void) {
+s32 Select_Player(void) {
     SEL_PL_X = 0;
     if (Break_Into) {
         return 0;
