@@ -114,9 +114,17 @@ if(WIN32)
     target_link_options(sfn PRIVATE "-Wl,--disable-dynamicbase")
 endif()
 
+# The version on the 3DS builds, after the description the HOME Menu and Homebrew Launcher show: the release workflow
+# passes its tag, otherwise it is what git describe says
+set(PORT_VERSION "" CACHE STRING "Version shown on the 3DS builds (default: git describe)")
+if(NOT PORT_VERSION)
+    execute_process(COMMAND git describe --tags --always WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                    OUTPUT_VARIABLE PORT_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+endif()
+
 if(NINTENDO_3DS)
-    ctr_create_3dsx(sfn "SF III New Generation" "CPS3 port" ${PORT}/ctr/cia/icon.png)
-    ctr_create_cia(sfn "SF III New Generation" "Street Fighter III New Generation (CPS3 port)" ${PORT}/ctr/cia)
+    ctr_create_3dsx(sfn "SF III New Generation" "CPS3 port ${PORT_VERSION}" ${PORT}/ctr/cia/icon.png)
+    ctr_create_cia(sfn "SF III New Generation" "Street Fighter III New Generation (CPS3 port) ${PORT_VERSION}" ${PORT}/ctr/cia)
 
     # PICA200 shaders (vertex, then geometry), assembled and embedded as a C header (<name>_shbin)
     function(ctr_shader target pica)
