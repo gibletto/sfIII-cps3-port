@@ -914,6 +914,13 @@ s32 check_renda_cancel(PLW* wk) {
             return 1;
         }
     }
+#ifdef HOST_PORT
+    /* no cancel: the board returns R0 as the failed test left it */
+    if (wk->wu.pat_status != renda_status_table[wk->cp->sw_new & 3]) {
+        return wk->cp->sw_new & 3;
+    }
+    return wk->cp->sw_now & CMD_SW_SHOT;
+#endif
 }
 
 

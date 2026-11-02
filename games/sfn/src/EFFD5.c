@@ -90,6 +90,9 @@ s32 effD5_sel_id(s16 pl) {
     if (Sel_PL_Complete[1] == 0) {
         return 1;
     }
+#ifdef HOST_PORT
+    return Sel_PL_Complete[1];    /* the board returns R0: Sel_PL_Complete[1] */
+#endif
 }
 
 s32 effect_D5_init(s16 id) {

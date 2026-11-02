@@ -334,6 +334,12 @@ void Com_Guard(PLW* wk) {
 
 
 
+#ifdef HOST_PORT
+/* the bare returns: the board returns R0, which holds wu.id * 2 (the VS_Tech index) */
+#define CCA_R0 wk->wu.id * 2
+#else
+#define CCA_R0
+#endif
 s32 Check_Counter_Attack(PLW* wk) {
     s16 xx;
     if (Area_Number[wk->wu.id] >= 3) {
@@ -342,19 +348,19 @@ s32 Check_Counter_Attack(PLW* wk) {
     xx = Type_of_Attack[wk->wu.id] & 0xF8;
     if (xx == 8) {
         VS_Tech[wk->wu.id] = 14;
-        return;
+        return CCA_R0;
     }
     if (xx == 24) {
         VS_Tech[wk->wu.id] = 14;
-        return;
+        return CCA_R0;
     }
     if (xx == 32) {
         VS_Tech[wk->wu.id] = 14;
-        return;
+        return CCA_R0;
     }
     if (xx == 48) {
         VS_Tech[wk->wu.id] = 14;
-        return;
+        return CCA_R0;
     }
     return Check_Hamari(wk);
 }
@@ -376,6 +382,9 @@ s32 Check_Hamari(PLW* wk) {
         }
         return VS_Tech[wk->wu.id] = 32;
     }
+#ifdef HOST_PORT
+    return tech;    /* the board returns R0: tech, neither 0 nor 1 */
+#endif
 }
 
 

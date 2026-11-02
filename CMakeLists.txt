@@ -53,18 +53,9 @@ target_compile_options(sfn_game PRIVATE
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86|i686|AMD64|i386")
     target_compile_options(sfn_game PRIVATE -malign-data=abi)
 endif()
-# Optimised (-O2), except the files with functions that can return without a value: those stay at -O0, so the
-# value left in the return register is the one the earlier builds gave (checked frame by frame and by sound).
+# Optimised (-O2). Where the game reads the value of a function that can end without returning one, the
+# function returns what the board leaves in R0 there (#ifdef HOST_PORT, from the program's disassembly).
 target_compile_options(sfn_game PRIVATE -O2)
-set(GAME_O0_FILES
-    CHARMOVE.c Ck_Pass.c Com_Pl.c Com_Sub.c EFF10.c EFF16.c EFF18.c EFF26.c EFF27.c EFF41.c EFF67.c EFF71.c EFF75.c
-    EFF76.c EFFB1.c EFFC1.c EFFC4.c EFFC6.c EFFD0.c EFFD1.c EFFD5.c EFFD6.c EFFD7.c EFFE2.c EFFE4.c EFFECT.c
-    EFFF2_code.c EFFG5.c PLS02.c PLS03.c VITAL.c aboutspr.c bg000.c cmd_main_2.c continue.c eeprom.c eff05.c eff06.c
-    eff65.c eff87.c eff88.c eff94.c effd2.c effe9.c n_input.c sc_sub_2.c sc_trans.c scrn_ctrl.c se_3.c
-    nonmatching/textsound_2.c)
-foreach(f ${GAME_O0_FILES})
-    set_source_files_properties(${GAME}/src/${f} PROPERTIES COMPILE_OPTIONS -O0)
-endforeach()
 
 # the board: memory, kernel, video, sound, EEPROM
 set(CPS3_SOURCES

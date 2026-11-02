@@ -2927,6 +2927,13 @@ u16 Tech_Number;
             }
         }
     }
+#ifdef HOST_PORT
+    /* no shell hit: the board returns R0 as the last shell's checks left it */
+    if (tmw->wu.routine_no[1] == SHELL_VANISH) {
+        return 2;
+    }
+    return Tech_Number == 0 && side == 1;
+#endif
 }
 
 
@@ -3163,6 +3170,18 @@ s16 time;
         }
         break;
     }
+#ifdef HOST_PORT
+    /* not stored long enough: the board returns R0 as the switch left it */
+    switch (lever) {
+    case LEVER_DOWN:
+        return wk->wu.id;
+    case LEVER_RIGHT:
+        return (u16)Lever_Store[wk->wu.id][1];
+    case LEVER_LEFT:
+        return (u16)Lever_Store[wk->wu.id][2];
+    }
+    return lever;
+#endif
 }
 
 
@@ -4114,6 +4133,25 @@ s32 Check_Shell(PLW* wk) {
         Guard_or_Jump_VS_Shell(wk, tmw, xx);
         return 1;
     }
+#ifdef HOST_PORT
+    /* every shell passed over: the board returns R0 as the last shell's checks left it */
+    if (tmw->wu.routine_no[1] == SHELL_VANISH) {
+        return 2;
+    }
+    if (wk->wu.rl_waza == tmw->wu.rl_flag) {
+        return tmw->wu.rl_flag;
+    }
+    if (tmw->wu.routine_no[0] != 1) {
+        return tmw->wu.routine_no[0];
+    }
+    if (Check_Behind(wk, tmw)) {
+        return 1;
+    }
+    if (tmw->wu.charset_id == 2) {
+        return 2;
+    }
+    return 1;    /* Check_Ignore_Shell's */
+#endif
 }
 
 
@@ -4592,6 +4630,9 @@ s32 ETC_Term_0001(PLW* wk, WORK* em) {
     if (!plw[wk->wu.id].sa->kind_of_arts) {
         return 1;
     }
+#ifdef HOST_PORT
+    return plw[wk->wu.id].sa->kind_of_arts;    /* the board returns R0: kind_of_arts */
+#endif
 }
 
 
