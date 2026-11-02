@@ -53,6 +53,16 @@
 
 #define SCSI_SEL_ATN_XFER   8       /* command: select with ATN and transfer */
 
+/* the BIOS's list of the SIMMs fitted, 4 bytes a slot (1-7): type (0 none), full and quick checksums */
+#ifndef HOST_PORT
+#define SIMM_TABLE      0x1FED4
+#else
+/* the host has no SIMMs to check (the graphics ROM is not behind its SIMM window, and the program is not in
+   flash): every slot is skipped */
+static const u8 simm_table_none[28];
+#define SIMM_TABLE      ((u32)simm_table_none)
+#endif
+
 /* memtest_no: the memory test page step */
 #define MEMTEST_INIT    0       /* memtest_menu_init: draw the menu */
 #define MEMTEST_SELECT  1       /* memtest_menu_select: choose a test */
@@ -234,7 +244,11 @@ void memtest_work_ram(void) {
     register s32 err;
     tilemap_print_string_attr(30, 3, 2, memtest_checking_str);
     _builtin_set_imask(15);
+#ifdef HOST_PORT
+    err = 0;                    /* work RAM is the host's own memory, at no fixed address */
+#else
     err = memtest_pattern_word((volatile u16*)WORK_RAM, 0x80000);
+#endif
     _builtin_set_imask(1);
     if (err) {
         tilemap_print_string_attr(30, 3, 8, memtest_ng_str);
@@ -492,7 +506,7 @@ s32 cd_check_disc_id(void) {
 
 /* provisional name */
 void memtest_cdrom(void) {
-    if (!no_cd_flag) {
+    if (!NO_CD_DRIVE) {
         tilemap_print_string_attr(30, 17, 2, memtest_checking_str);
         if (cd_check_drive_inquiry() == 0) {
             tilemap_print_string_attr(30, 17, 2, memtest_ok_str);
@@ -512,7 +526,7 @@ void memtest_simm_quick(void) {
     s32 slot;
     s32 j;
     u32 sum;
-    u32 p = 0x1FED4;
+    u32 p = SIMM_TABLE;
     u32 q;
     for (slot = 1; slot < 8; slot++) {
         if (*(u8*)p != 0) {
@@ -525,7 +539,7 @@ void memtest_simm_quick(void) {
             }
             if (sum % 256 != *(u8*)(p + 2)) {
                 memtest_error = 1;
-                q = 0x1FED4;
+                q = SIMM_TABLE;
                 for (j = 1; j < 8; j++) {
                     if (*(u8*)q != 0 && sum % 256 == *(u8*)(q + 2)) {
                         break;
@@ -570,7 +584,7 @@ void memtest_memory_check(void) {
 void simm_check_run(void) {
     s32 slot;
     u32 sum;
-    u32 p = 0x1FED4;
+    u32 p = SIMM_TABLE;
     tilemap_fill_all(0, 32);
     tilemap_print_string(0, 0, 0xFFFF, memtest_simm_scr);
     for (slot = 1; slot < 8; slot++) {
