@@ -1866,3 +1866,12 @@ const s16 Back_Jump_Data[26] = { 128, 128, 128, 128, 128, 128, 128, 128, 128, 12
 const u16 Power_Lv_Data[4] = {
     BUTTON_LP, BUTTON_MP, BUTTON_HP, BUTTON_PUNCHES,
 };
+
+#ifdef HOST_PORT
+/* Power_Lv_Data is read at (Power_Level & 0xF) - 8, up to 7, past its end into the bytes after it in the
+   arcade link: a halfword 0x65F2, then the initialiser of Select_Technique's Tech_Tbl (SEL_TECH.C), whose
+   first word is the address of Select_Technique_1st (06030DFA). As the board has them: */
+const u16 Power_Lv_Data_board_tail[4] = {
+    0x65F2, 0x0603, 0x0DFA, 0x0603,
+};
+#endif

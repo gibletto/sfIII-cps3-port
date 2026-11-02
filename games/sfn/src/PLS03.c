@@ -14,6 +14,11 @@
 #include "structs.h"
 #include "work.h"
 #include "romdata.h"
+#ifdef HOST_PORT
+#include "host_board.h"    /* meoshi_off_shot is read past its end, into renda_status_table */
+#else
+#define BOARD_READ(tbl, i) ((tbl)[i])
+#endif
 #include "extern.h"
 #include "EFFECT.h"
 #include "effect_2.h"
@@ -872,7 +877,7 @@ s32 check_meoshi_cancel(PLW* wk) {
     }
     tdat = (wk->wu.cg_eftype & 0x70) / 16;
     if (tdat != 0x70) {
-        if (wk->cp->sw_new & meoshi_off_shot[tdat] & 0x3F0) {
+        if (wk->cp->sw_new & BOARD_READ(meoshi_off_shot, tdat) & 0x3F0) {
             return 0;
         }
     }
