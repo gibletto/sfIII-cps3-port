@@ -270,6 +270,9 @@ u8 cps3_bios[CPS3_BIOS_SIZE];
 #define CG_ENTRIES 0x10000
 #define CG_DIR_BYTES 0x7A1E0
 CharGfxEntry* host_cg_data_tbl;
+/* The set of an empty directory entry: the board reads through its null pointer, so the BIOS bytes at
+   address 0 are the set it sees. check_cg_data counts it as no set, as the board does. */
+CharGfxSet* host_cg_bios_set;
 
 /* Section bounds reset_entry uses. The C runtime already did that work. */
 int *B_BGN, *B_END, *D_BGN, *D_END, *D_ROM;
@@ -402,6 +405,7 @@ static s32 load_cg(u8* rom, u32 size) {
         return -1;
     }
     host_cg_data_tbl = calloc(CG_ENTRIES, sizeof(CharGfxEntry));
+    host_cg_bios_set = convert_set(cps3_bios, CPS3_BIOS_SIZE, CG_BASE);     /* the BIOS is loaded first */
     done = calloc(size / 4, sizeof(CharGfxSet*));
     if (host_cg_data_tbl == NULL || done == NULL) {
         fprintf(stderr, "out of memory for the pattern directory\n");
@@ -417,7 +421,9 @@ static s32 load_cg(u8* rom, u32 size) {
         host_cg_data_tbl[i].x = (s16)be16(e + 2);
         host_cg_data_tbl[i].y = (s16)be16(e + 4);
         host_cg_data_tbl[i].cge_free = (s16)be16(e + 6);
-        if (addr >= CG_BASE && addr - CG_BASE < size) {
+        if (addr == 0) {
+            host_cg_data_tbl[i].set = host_cg_bios_set;
+        } else if (addr >= CG_BASE && addr - CG_BASE < size) {
             u32 k = (addr - CG_BASE) / 4;
             if (done[k] == NULL && (done[k] = convert_set(rom, size, addr)) == NULL && addr - CG_BASE + 12 <= size) {
                 fprintf(stderr, "out of memory for the pattern directory\n");
